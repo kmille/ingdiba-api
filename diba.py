@@ -54,8 +54,7 @@ def sign(signing_string):
 def get_access_token():
     endpoint = "/oauth2/token"
     method = "POST"
-    #body = "grant_type=client_credentials&scope=granting+greetings%3Aview"
-    body = "grant_type=client_credentials"
+    body = "grant_type=client_credentials&scope=greetings%3Aview"
     json = build_request(method, endpoint, body)
     access_token = json['access_token']
     return access_token
@@ -63,10 +62,11 @@ def get_access_token():
 
 def showcase():
     access_token = get_access_token()
-    print("got the access_token", access_token)
+    #print("got the access_token", access_token)
     endpoint = "/greetings/single"
     method = "GET"
     json = build_request(method, endpoint, access_token=access_token)
+    print(json)
 
 
 def build_request(method, endpoint, data="", access_token=None):
@@ -83,17 +83,17 @@ def build_request(method, endpoint, data="", access_token=None):
     if access_token:
         headers.update({
                 "Authorization": "Bearer {}".format(access_token),
-                "Content-Type": "application/json"})
+                "Signature": 'keyId="{}",algorithm="rsa-sha256",headers="(request-target) date digest x-ing-reqid",signature="{}"'.format(client_id, calc_signature(method.lower(), endpoint, date, digest, req_id)),
+                "Accept": "application/json"})
     else:
         headers.update({
                 "Content-Type": "application/x-www-form-urlencoded"})
     resp = requests.request(method.upper(), api_base % endpoint, headers=headers, data=data, cert=cert)
-    print(resp.text)
+    #print(resp.text)
     json = resp.json()
     return resp.json()
 
 
 #assert calc_digest(""), "47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU="
-
 #get_access_token()
 showcase()

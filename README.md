@@ -16,3 +16,13 @@ docs: https://developer.ing.com/openbanking/get-started
     - upload both
 4. you have to wait until your app is activated (not in status: pending)
 3. play arround with diba.py
+
+## Usage
+```
+kmille@linbox ingdiba-api % python diba.py
+{'message': 'Welcome to ING!', 'id': '87abdd67-5ea0-451f-9430-4eb7fad85d66', 'messageTimestamp': '2018-11-07 08:04:05 GMT'}
+```
+
+## todo
+- verify response: https://python-jose.readthedocs.io/en/latest/jwk/index.html (pub key comes from the server?)
+- logger
